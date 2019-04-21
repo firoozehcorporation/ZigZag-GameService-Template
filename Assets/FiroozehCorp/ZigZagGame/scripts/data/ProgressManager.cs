@@ -67,7 +67,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 					DataStorage.ReportLeaderboardScore(GPGSIds.leaderboard_high_score, (uint)score);
 				}
 				
-				SessionManager.Instance.GameService?.SaveGame(
+				SessionManager.GameService?.SaveGame(
 					"ZigZagGame"
 					,"ZigZagGameSave"
 					,null

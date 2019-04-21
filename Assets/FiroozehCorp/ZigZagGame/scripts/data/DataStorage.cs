@@ -49,7 +49,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				FetchEventForLocalStorage(GPGSIds.event_attempts);
 				FetchLeaderB‌‌oardForLocalStorage(GPGSIds.leaderboard_high_score);
 				
-				SessionManager.Instance.GameService?.GetSaveGame<Save>( save =>
+				SessionManager.GameService?.GetSaveGame<Save>( save =>
 				{
 					SaveLocalData(GPGSIds.event_attempts, save.Attempts);
 					SaveLocalData(GPGSIds.leaderboard_high_score,save.HighScore);
@@ -82,7 +82,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			#endif
 				
          #if UNITY_ANDROID
-				SessionManager.Instance.GameService?.SubmitScore(leaderboardId,(int)score,success => {},error => {});
+				SessionManager.GameService?.SubmitScore(leaderboardId,(int)score,success => {},error => {});
          #endif
 				
 			}
@@ -123,7 +123,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			#endif
 				
                 #if UNITY_ANDROID
-				SessionManager.Instance.GameService?.UnlockAchievement(achievementId,success => {},error => {});
+				SessionManager.GameService?.UnlockAchievement(achievementId,success => {},error => {});
 				#endif
 			}
 
@@ -164,7 +164,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				loadJobs--;
 
             #if UNITY_ANDROID
-				SessionManager.Instance.GameService?.GetLeaderBoards(success => {},error => {});
+				SessionManager.GameService?.GetLeaderBoards(success => {},error => {});
 			#elif UNITY_IOS
 				//ios implementation...if different
 				//dont forget to decrement load jobs

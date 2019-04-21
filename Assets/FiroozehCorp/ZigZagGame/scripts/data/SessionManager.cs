@@ -18,7 +18,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 		public class SessionManager : MonoBehaviour {
 
 			public static SessionManager Instance;
-			public FiroozehGameService GameService;
+			public static FiroozehGameService GameService;
 
 			private string userId { get; set; }
 			public bool validUser { 
@@ -59,8 +59,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			void ConfigureGameService() {
 		#if UNITY_ANDROID
 				
+			if(GameService == null)
 			FiroozehGameServiceInitializer
-					    .With("Your clientId","Your clientSecret")
+				.With("Your clientId","Your clientSecret")
 						.IsNotificationEnable(true)
 						.CheckGameServiceInstallStatus(true)
 						.CheckGameServiceOptionalUpdate(true)
