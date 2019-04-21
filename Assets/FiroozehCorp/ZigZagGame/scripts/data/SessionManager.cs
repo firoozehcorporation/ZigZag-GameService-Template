@@ -60,8 +60,10 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 		#if UNITY_ANDROID
 				
 			if(GameService == null)
-			FiroozehGameServiceInitializer
-				.With("Your clientId","Your clientSecret")						.IsNotificationEnable(true)
+			/* FiroozehGameServiceInitializer
+				//.With("Your clientId","Your clientSecret")
+					    .With("GameService_ZigZag","styo69b77wr6x3p3uw9jp9")
+						.IsNotificationEnable(true)
 						.CheckGameServiceInstallStatus(true)
 						.CheckGameServiceOptionalUpdate(true)
 						.Init(g => { GameService = g; }, 
@@ -69,6 +71,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 							{
 								Debug.Log("FiroozehGameServiceInitializerError: "+e);
 							});
+							*/
 							
 
 
