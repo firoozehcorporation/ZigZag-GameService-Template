@@ -1,4 +1,6 @@
-﻿namespace FiroozehCorp.ZigZagGame.scripts.menu {
+﻿using FiroozehCorp.ZigZagGame.scripts.data.ZigZag;
+
+namespace FiroozehCorp.ZigZagGame.scripts.menu {
 	namespace ZigZag {
 
 		/// <summary>
@@ -6,14 +8,19 @@
 		/// </summary>
 		public class OpenLeaderboardsEvent : ButtonEvent {
 
-			//SessionManager session;
+			SessionManager session;
 
+			
 			/// <summary>
 			/// Initialize required variables
 			/// </summary>
 			public override void Init() {
+               #if UNITY_WEBGL
+				img.enabled = false;
+				return;
+			#endif
 				base.Init();
-				//session = SessionManager.Instance;
+				session = SessionManager.Instance;
 			}
 
 			/// <summary>
@@ -22,7 +29,7 @@
 			public override void OnClick() {
 				if (!game.GameOver) return;
 				base.OnClick();
-				//session.ShowLeaderboard();
+				session.ShowLeaderboard();
 			}
 		}
 	}
