@@ -61,8 +61,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				
 			if(GameService == null)
 			FiroozehGameServiceInitializer
-				.With("Your clientId","Your clientSecret")
-						.IsNotificationEnable(true)
+				.With("Your clientId","Your clientSecret")						.IsNotificationEnable(true)
 						.CheckGameServiceInstallStatus(true)
 						.CheckGameServiceOptionalUpdate(true)
 						.Init(g => { GameService = g; }, 

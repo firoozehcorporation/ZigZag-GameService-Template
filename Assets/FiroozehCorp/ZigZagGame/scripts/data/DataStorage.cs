@@ -1,5 +1,4 @@
-﻿using FiroozehCorp.ZigZagGame.scripts.game.ZigZag;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 #if UNITY_ANDROID
@@ -30,6 +29,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			static int loadJobs;
 			static bool initialLoadBegan;
+			private static HashSet<string> unlockedAchiv = new HashSet<string>();
+			private static int deley = 0;
+			
 			
 			/// <summary>
 			/// Only called once per user.
@@ -82,9 +84,14 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			#endif
 				
          #if UNITY_ANDROID
-				SessionManager.GameService?.SubmitScore(leaderboardId,(int)score,success => {},error => {});
-         #endif
-				
+				if (deley == 10)
+				{
+					SessionManager.GameService?.SubmitScore(leaderboardId, (int) score, success => { }, error => { });
+					deley = 0;
+				}
+				else deley++;
+#endif
+
 			}
 
 			/// <summary>
@@ -123,8 +130,15 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			#endif
 				
                 #if UNITY_ANDROID
-				SessionManager.GameService?.UnlockAchievement(achievementId,success => {},error => {});
-				#endif
+				if (unlockedAchiv.Contains(achievementId)) return;
+				
+
+					SessionManager.GameService?.UnlockAchievement(achievementId, success =>
+					{
+						unlockedAchiv.Add(achievementId);
+					}, error => { });
+				
+#endif
 			}
 
 			/// <summary>

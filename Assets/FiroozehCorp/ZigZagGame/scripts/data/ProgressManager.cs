@@ -13,10 +13,12 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 		public class ProgressManager : MonoBehaviour {
 
 			public static ProgressManager Instance;
+			
 
 			public int Attempts => DataStorage.GetLocalData(GPGSIds.event_attempts);
 			public int HighScore => DataStorage.GetLocalData(GPGSIds.leaderboard_high_score);
 			public int Score => score;
+			
 
 			public bool AudioOn { 
 				get { 
@@ -54,6 +56,15 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			/// Reset score
 			/// </summary>
 			public void ResetScore() {
+				
+				SessionManager.GameService?.SaveGame(
+					"ZigZagGame"
+					,"ZigZagGameSave"
+					,null
+					,new Save {Attempts = Attempts, HighScore = HighScore, Score = Score}
+					,success => {},error => {}
+				);
+				
 				score = 0;
 			}
 
@@ -66,15 +77,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				if (score > HighScore) {
 					DataStorage.ReportLeaderboardScore(GPGSIds.leaderboard_high_score, (uint)score);
 				}
-				
-				SessionManager.GameService?.SaveGame(
-					"ZigZagGame"
-					,"ZigZagGameSave"
-					,null
-					,new Save {Attempts = Attempts, HighScore = HighScore, Score = Score}
-					,success => {},error => {}
-				);
-				
+						
 				CheckScoreAchievementUnlock();
 				
 			}
