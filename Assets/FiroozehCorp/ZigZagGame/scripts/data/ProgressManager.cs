@@ -12,9 +12,10 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			public static ProgressManager Instance;
 
-			public int Attempts { get { return DataStorage.GetLocalData(GPGSIds.event_attempts); } }
-			public int HighScore { get { return DataStorage.GetLocalData(GPGSIds.leaderboard_high_score); } }
-			public int Score { get { return score; } }
+			public int Attempts => DataStorage.GetLocalData(GPGSIds.event_attempts);
+			public int HighScore => DataStorage.GetLocalData(GPGSIds.leaderboard_high_score);
+			public int Score => score;
+
 			public bool AudioOn { 
 				get { 
 				#if UNITY_WEBGL
@@ -42,13 +43,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			/// <summary>
 			/// Saves audio state locally
 			/// </summary>
-			public void ToggleAudio() {
-				if (AudioOn) {
-					DataStorage.SaveLocalData("Audio", 0);
-				}
-				else {
-					DataStorage.SaveLocalData("Audio", 1);
-				}
+			public void ToggleAudio()
+			{
+				DataStorage.SaveLocalData("Audio", AudioOn ? 0 : 1);
 			}
 			
 			/// <summary>

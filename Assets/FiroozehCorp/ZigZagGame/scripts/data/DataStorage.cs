@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using FiroozehCorp.ZigZagGame.scripts.game.ZigZag;
+using Newtonsoft.Json;
+using UnityEngine;
 
 #if UNITY_ANDROID
 
@@ -18,15 +20,15 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			{
 				get { 
 					if (!initialLoadBegan) return true;
-					return loadJobs > 0 ? true : false; 
+					return loadJobs > 0; 
 				}
 			}
 
-			static string INITIALIZED = "INITIALIZED";
+			static readonly string INITIALIZED = "INITIALIZED";
 			static string USER_ID;
 
-			static int loadJobs = 0;
-			static bool initialLoadBegan = false;
+			static int loadJobs;
+			static bool initialLoadBegan;
 			
 			/// <summary>
 			/// Only called once per user.
@@ -39,12 +41,22 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				USER_ID = user;		
 
 				//determine if this user has data stored on this device
-				int localStorageStatus = PlayerPrefs.GetInt(USER_ID+INITIALIZED);
+				var localStorageStatus = PlayerPrefs.GetInt(USER_ID+INITIALIZED);
 
 				if (localStorageStatus == 1 && !reset) return;
 				SaveLocalData("Audio", 1);
 				FetchEventForLocalStorage(GPGSIds.event_attempts);
-				FetchLeaderboardForLocalStorage(GPGSIds.leaderboard_high_score);
+				FetchLeaderB‌‌oardForLocalStorage(GPGSIds.leaderboard_high_score);
+				
+				GameManager.GameService?.GetSaveGame(success =>
+				{
+					Save s = JsonConvert.DeserializeObject<Save>(success);
+					SaveLocalData(GPGSIds.event_attempts, s.Attempts);
+					SaveLocalData(GPGSIds.leaderboard_high_score,s.HighScore);
+					
+				},error => {});
+				
+				
 				if (USER_ID != string.Empty) loadJobs += 2;
 
 				PlayerPrefs.SetInt(USER_ID+INITIALIZED, 1);
@@ -62,12 +74,17 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			#if UNITY_ANDROID || UNITY_IOS
 				Social.ReportScore(score, leaderboardId, 
-					(bool success) => 
+					success => 
 					{
 						SaveLocalData(leaderboardId, (int)score);
 					}
 				);
 			#endif
+				
+         #if UNITY_ANDROID
+				GameManager.GameService?.SubmitScore(leaderboardId,(int)score,success => {},error => {});
+         #endif
+				
 			}
 
 			/// <summary>
@@ -76,11 +93,10 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			/// </summary>
 			public static void IncrementEvent(string eventId, uint amount) {
 
-				int newValue = GetLocalData(eventId) + (int)amount;
+				var newValue = GetLocalData(eventId) + (int)amount;
 				SaveLocalData(eventId, newValue);
 
 				if (!SessionManager.Instance.validUser) {
-					return;
 				}
 
 			#if UNITY_ANDROID
@@ -103,8 +119,12 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				}
 
 			#if UNITY_ANDROID || UNITY_IOS
-				Social.ReportProgress(achievementId, 100.0f, (success) => {});
+				Social.ReportProgress(achievementId, 100.0f, success => {});
 			#endif
+				
+                #if UNITY_ANDROID
+				GameManager.GameService?.UnlockAchievement(achievementId,success => {},error => {});
+				#endif
 			}
 
 			/// <summary>
@@ -114,7 +134,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			#if UNITY_WEBGL
 				return 0; //no achievements on webgl
 			#endif
-				int ret = PlayerPrefs.GetInt(USER_ID+dataId);
+				var ret = PlayerPrefs.GetInt(USER_ID+dataId);
 				return ret;
 			}
 
@@ -132,35 +152,18 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			/// Request a leaderboard value from the remote server (cloud)
 			/// If no user is logged in, the local data for 'leaderboardId' is saved to player prefs
 			/// </summary>
-			static void FetchLeaderboardForLocalStorage(string leaderboardId) {
+			static void FetchLeaderB‌‌oardForLocalStorage(string leaderboardId) {
 			#if UNITY_WEBGL
 				loadJobs--;
 				return; //no leaderboard on webgl
 			#endif
-				if (!SessionManager.Instance.validUser) {
-					//no valid user..no need to poll the cloud. initialize local
-					SaveLocalData(leaderboardId, 0);
-					loadJobs--;
-					return;
-				}
+				if (SessionManager.Instance.validUser) return;
+				//no valid user..no need to poll the cloud. initialize local
+				SaveLocalData(leaderboardId, 0);
+				loadJobs--;
 
-				int fetchData = 0;
-
-			#if UNITY_ANDROID
-				/*PlayGamesPlatform.Instance.LoadScores(
-					leaderboardId,
-					LeaderboardStart.PlayerCentered,
-					1,
-					LeaderboardCollection.Public,
-					LeaderboardTimeSpan.AllTime,
-					(data) => {	
-						fetchData = (int)data.PlayerScore.value;
-
-						SaveLocalData(leaderboardId, fetchData);
-
-						loadJobs--;
-				});
-				*/
+            #if UNITY_ANDROID
+				GameManager.GameService?.GetLeaderBoards(success => {},error => {});
 			#elif UNITY_IOS
 				//ios implementation...if different
 				//dont forget to decrement load jobs
@@ -176,16 +179,13 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				loadJobs--;
 				return; //no events on webgl
 			#endif
-				if (!SessionManager.Instance.validUser) {
-					//no valid user..no need to poll the cloud. initialize local
-					SaveLocalData(eventId, 0);
-					loadJobs--;
-					return;
-				}
+				if (SessionManager.Instance.validUser) return;
+				//no valid user..no need to poll the cloud. initialize local
+				SaveLocalData(eventId, 0);
+				loadJobs--;
 
-				int fetchData = 0;
 
-			#if UNITY_ANDROID
+#if UNITY_ANDROID
 				/*PlayGamesPlatform.Instance.Events.FetchEvent(
 					DataSource.ReadCacheOrNetwork,
 					eventId,

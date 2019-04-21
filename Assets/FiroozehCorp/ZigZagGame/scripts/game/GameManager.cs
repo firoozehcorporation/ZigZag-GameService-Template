@@ -43,7 +43,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 				}
 				else {
 					Instance = this;
-					StartCoroutine("LerpColors");
+					StartCoroutine(nameof(LerpColors));
 					pageManager = GetComponent<PageManager>();
 					DontDestroyOnLoad(gameObject);
 				}
@@ -95,17 +95,16 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 				if (gameOver) return;
 
 				scoreTimer += Time.deltaTime;
-				if (scoreTimer >= scoreFrequency) {
-					progress.AddScore(1);
-					scoreTimer = 0;
-				}
+				if (!(scoreTimer >= scoreFrequency)) return;
+				progress.AddScore(1);
+				scoreTimer = 0;
 			}
 
 			/// <summary>
 			/// Invoked via Tap Controller event. See OnEnable
 			/// Add and save score. See ProgressManager.cs
 			/// </summary>
-			void OnPickup() {
+			private void OnPickup() {
 				progress.AddScore(5);
 			}
 
@@ -117,7 +116,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 			void OnLose() {
 				gameOver = true;
 				pageManager.TurnPageOn(PageType.Hud, PageType.GameOver);
-				camera = Camera.main.GetComponent<CameraController>();
+				if (Camera.main != null) camera = Camera.main.GetComponent<CameraController>();
 				camera.StartLoseSequence();
 			}
 
@@ -126,7 +125,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 			/// Reinitializes necessary game variables and reloads the main menu
 			/// </summary>
 			public void Init() {
-				camera = Camera.main.GetComponent<CameraController>();
+				if (Camera.main != null) camera = Camera.main.GetComponent<CameraController>();
 				camera.StartAtEntry();
 				worldSpacePageManager = GameObject.FindWithTag("WorldSpacePageManager").GetComponent<PageManager>();
 				worldSpacePageManager.TurnPageOn(PageType.None, PageType.MenuLeft);
@@ -137,8 +136,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 			/// <summary>
 			/// Called by Session Manager after user logs in
 			/// </summary>
-			public void StartApp() {
-				camera = Camera.main.GetComponent<CameraController>();
+			public void StartApp()
+			{
+				if (Camera.main != null) camera = Camera.main.GetComponent<CameraController>();
 				camera.StartEntrySequence();
 			}
 
@@ -159,8 +159,8 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 			public void RestartGame() {
 				audio.PlaySound(SoundType.Click);
 				pageManager.TurnPageOn(PageType.GameOver, PageType.Fade);
-				StopCoroutine("ReloadScene");
-				StartCoroutine("ReloadScene");
+				StopCoroutine(nameof(ReloadScene));
+				StartCoroutine(nameof(ReloadScene));
 			}
 
 			/// <summary>
@@ -168,12 +168,12 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 			/// Send pooled objects back to the persistent, undying parent. See Pool.cs (Objects are not reinstantiated)
 			/// Reload the scene (easy way to get all objects back in place)
 			/// </summary>
-			IEnumerator ReloadScene() {
+			private IEnumerator ReloadScene() {
 				while (!pageManager.PageIsOn(PageType.Fade)) {
 					yield return null;
 				}
 				
-				GameObject.FindObjectOfType<WallSpawner>().ReleasePoolObjects();
+				FindObjectOfType<WallSpawner>().ReleasePoolObjects();
 				scene.ReloadScene();
 
 				while (scene.IsLoading) {
@@ -187,9 +187,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 			/// <summary>
 			/// Change color of wall material over time. One material affects all the wall pieces
 			/// </summary>
-			IEnumerator LerpColors() {
-				int color = 1;
-				Color current = wallMat.GetColor("_Color");
+			private IEnumerator LerpColors() {
+				var color = 1;
+				var current = wallMat.GetColor("_Color");
 				while (true) {
 					while (!ColorsMatch(current, colorBin[color])) {
 						current = Color.Lerp(current, colorBin[color], colorSmooth * Time.deltaTime);
@@ -204,12 +204,11 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 			/// <summary>
 			/// Return true if two colors match. Used by the LerpColors coroutine
 			/// </summary>
-			bool ColorsMatch(Color c1, Color c2) {
-				if (Mathf.Abs(c1.r - c2.r) < 0.02f &&
-					Mathf.Abs(c1.g - c2.g) < 0.02f &&
-					Mathf.Abs(c1.b - c2.b) < 0.02f)
-					return true;
-				return false;
+			static bool ColorsMatch(Color c1, Color c2)
+			{
+				return Mathf.Abs(c1.r - c2.r) < 0.02f &&
+				       Mathf.Abs(c1.g - c2.g) < 0.02f &&
+				       Mathf.Abs(c1.b - c2.b) < 0.02f;
 			}
 
 		}

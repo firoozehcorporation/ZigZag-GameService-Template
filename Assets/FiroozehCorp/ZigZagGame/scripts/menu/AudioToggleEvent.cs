@@ -22,7 +22,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.menu {
 			public override void Init() {
 				base.Init();
 				progress = ProgressManager.Instance;
-				StartCoroutine("SetSprite");
+				StartCoroutine($"SetSprite");
 			}
 
 			/// <summary>
