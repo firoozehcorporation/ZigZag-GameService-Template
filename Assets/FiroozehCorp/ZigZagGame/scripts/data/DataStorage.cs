@@ -14,8 +14,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 		/// Increment Events, Update Leaderboards, and Apply Achievements
 		/// The functions in this class should only be called by ProgressManager.cs
 		/// </summary>
-		public class DataStorage {
-
+		public class DataStorage
+		{
+			
 			public static bool LOADING_USER 
 			{
 				get { 
@@ -48,11 +49,10 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				FetchEventForLocalStorage(GPGSIds.event_attempts);
 				FetchLeaderB‌‌oardForLocalStorage(GPGSIds.leaderboard_high_score);
 				
-				GameManager.GameService?.GetSaveGame(success =>
+				SessionManager.Instance.GameService?.GetSaveGame<Save>( save =>
 				{
-					Save s = JsonConvert.DeserializeObject<Save>(success);
-					SaveLocalData(GPGSIds.event_attempts, s.Attempts);
-					SaveLocalData(GPGSIds.leaderboard_high_score,s.HighScore);
+					SaveLocalData(GPGSIds.event_attempts, save.Attempts);
+					SaveLocalData(GPGSIds.leaderboard_high_score,save.HighScore);
 					
 				},error => {});
 				
@@ -82,7 +82,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			#endif
 				
          #if UNITY_ANDROID
-				GameManager.GameService?.SubmitScore(leaderboardId,(int)score,success => {},error => {});
+				SessionManager.Instance.GameService?.SubmitScore(leaderboardId,(int)score,success => {},error => {});
          #endif
 				
 			}
@@ -123,7 +123,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			#endif
 				
                 #if UNITY_ANDROID
-				GameManager.GameService?.UnlockAchievement(achievementId,success => {},error => {});
+				SessionManager.Instance.GameService?.UnlockAchievement(achievementId,success => {},error => {});
 				#endif
 			}
 
@@ -146,6 +146,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				return; //no playerprefs on webgl due to mem consumption
 			#endif
 				PlayerPrefs.SetInt(USER_ID+dataId, amount);
+				
 			}
 
 			/// <summary>
@@ -163,7 +164,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				loadJobs--;
 
             #if UNITY_ANDROID
-				GameManager.GameService?.GetLeaderBoards(success => {},error => {});
+				SessionManager.Instance.GameService?.GetLeaderBoards(success => {},error => {});
 			#elif UNITY_IOS
 				//ios implementation...if different
 				//dont forget to decrement load jobs

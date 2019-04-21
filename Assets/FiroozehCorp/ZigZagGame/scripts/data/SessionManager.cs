@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using FiroozehCorp.ZigZagGame.scripts.game.ZigZag;
+using FiroozehGameServiceAndroid;
+using FiroozehGameServiceAndroid.Builders;
 using UnityEngine;
 
 #if UNITY_ANDROID
@@ -15,12 +18,13 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 		public class SessionManager : MonoBehaviour {
 
 			public static SessionManager Instance;
+			public FiroozehGameService GameService;
 
-			public string userId { get; private set; }
+			private string userId { get; set; }
 			public bool validUser { 
 				get { 
 				#if UNITY_ANDROID
-					//return PlayGamesPlatform.Instance.IsAuthenticated(); 
+					return GameService != null;
 				#elif UNITY_IOS
 					//return //ios implementation...if different
 				#endif
@@ -48,20 +52,27 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			/// </summary>
 			void Start() {
 				game = GameManager.Instance;
-				ConfigureGooglePlay();
+				ConfigureGameService();
 			}
 
-			/// <summary>
-			/// Standard Google Play Initialization function calls
-			/// Unity social class will attempt to log the player in using a callback function 'ProcessAuthentication'
-			/// </summary>
-			void ConfigureGooglePlay() {
+			
+			void ConfigureGameService() {
 		#if UNITY_ANDROID
-				/*PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
-				PlayGamesPlatform.InitializeInstance(config);
-				PlayGamesPlatform.DebugLogEnabled = true;
-				PlayGamesPlatform.Activate();
-				*/
+				
+				FiroozehGameServiceInitializer
+					    .With("Your clientId","Your clientSecret")
+						.IsNotificationEnable(true)
+						.CheckGameServiceInstallStatus(true)
+						.CheckGameServiceOptionalUpdate(true)
+						.Init(g => { GameService = g; }, 
+							e =>
+							{
+								Debug.Log("FiroozehGameServiceInitializerError: "+e);
+							});
+
+
+		
+			
 		#elif UNITY_IOS
 				//ios implementation...if different
 		#endif
@@ -82,7 +93,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 					Debug.Log("Google Play Authentication Failure!");
 				}
 				DataStorage.LoadUser(userId, false);
-				StartCoroutine("WaitToStart");
+				StartCoroutine(nameof(WaitToStart));
 			}
 
 			/// <summary>
@@ -98,7 +109,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			public void ShowAchievements() {
 		#if UNITY_ANDROID
-				//PlayGamesPlatform.Instance.ShowAchievementsUI();
+				GameService?.ShowAchievementsUI(error=>{});
 		#elif UNITY_IOS
 				//ios implementation...if different
 		#endif
@@ -106,7 +117,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			public void ShowLeaderboard() {
 		#if UNITY_ANDROID
-				//PlayGamesPlatform.Instance.ShowLeaderboardUI();
+				GameService?.ShowLeaderBoardsUI(error=>{});
 		#elif UNITY_IOS
 				//ios implementation...if different
 		#endif

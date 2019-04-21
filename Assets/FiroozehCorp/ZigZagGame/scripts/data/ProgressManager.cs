@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using FiroozehCorp.ZigZagGame.scripts.game.ZigZag;
+using Newtonsoft.Json;
+using UnityEngine;
 
 namespace FiroozehCorp.ZigZagGame.scripts.data {
 	
@@ -64,8 +66,17 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				if (score > HighScore) {
 					DataStorage.ReportLeaderboardScore(GPGSIds.leaderboard_high_score, (uint)score);
 				}
-
+				
+				SessionManager.Instance.GameService?.SaveGame(
+					"ZigZagGame"
+					,"ZigZagGameSave"
+					,null
+					,new Save {Attempts = Attempts, HighScore = HighScore, Score = Score}
+					,success => {},error => {}
+				);
+				
 				CheckScoreAchievementUnlock();
+				
 			}
 
 			/// <summary>

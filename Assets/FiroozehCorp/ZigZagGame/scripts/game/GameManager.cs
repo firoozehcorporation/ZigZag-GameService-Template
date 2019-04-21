@@ -15,7 +15,6 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 		public class GameManager : MonoBehaviour {
 
 			public static GameManager Instance;
-			public static FiroozehGameService GameService;
 			
 			public Material wallMat;
 			public Color[] colorBin;
@@ -58,17 +57,6 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 				progress = ProgressManager.Instance;
 				audio = AudioManager.Instance;
 				
-				
-				FiroozehGameServiceInitializer
-					.With("Your clientId","Your clientSecret")
-					.IsNotificationEnable(true)
-					.CheckGameServiceInstallStatus(true)
-					.CheckGameServiceOptionalUpdate(true)
-					.Init(g => { GameService = g; }, 
-						e =>
-						{
-							Debug.Log("FiroozehGameServiceInitializerError: "+e);
-						});
 			}
 
 			/// <summary>

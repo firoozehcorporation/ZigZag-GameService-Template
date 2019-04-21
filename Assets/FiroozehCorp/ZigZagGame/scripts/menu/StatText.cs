@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using FiroozehCorp.ZigZagGame.scripts.data.ZigZag;
+using FiroozehCorp.ZigZagGame.scripts.game;
+using FiroozehGameServiceAndroid.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +18,12 @@ namespace FiroozehCorp.ZigZagGame.scripts.menu {
 				HighScore,
 				Attempts,
 				Score , 
-				About
+				About ,
+				Start ,
+				Continue ,
+				GameName ,
+				GameDescription
+		
 			}
 			public StatType statType;
 			public string prefix;
@@ -47,14 +54,29 @@ namespace FiroozehCorp.ZigZagGame.scripts.menu {
 			#elif !UNITY_WEBGL
 				switch (statType) {
 					case StatType.HighScore:
-						txt.text = prefix + progress.HighScore;
+						txt.text = FarsiTextUtil.Fix("بیشترین امتیاز : " + progress.HighScore);
 						break;
 					case StatType.Attempts:
-						txt.text = prefix + progress.Attempts.ToString();
+						txt.text = FarsiTextUtil.Fix("تعداد بازی : "+ progress.Attempts);
 						break;
 					case StatType.Score:
+						txt.text = FarsiTextUtil.Fix( "امتیاز : "+ progress.Score);
 						break;
 					case StatType.About:
+						txt.text = FarsiTextUtil.Fix(
+							"بازی زیگزاگ \n قدرت گرفته از ");
+						break;
+					case StatType.Start:
+						txt.text = FarsiTextUtil.Fix("شروع بازی");
+						break;
+					case StatType.Continue:
+						txt.text = FarsiTextUtil.Fix("دوباره");
+						break;
+					case StatType.GameName:
+						txt.text = FarsiTextUtil.Fix("زیگزاگ");
+						break;
+					case StatType.GameDescription:
+						txt.text = FarsiTextUtil.Fix("قدرت گرفته از");
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -67,7 +89,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.menu {
 			/// </summary>
 			void Update() {
 				if (statType != StatType.Score) return;
-				txt.text = prefix + progress.Score.ToString();
+				txt.text = FarsiTextUtil.Fix(progress.Score + " امتیاز ");
 			}
 		}
 	}

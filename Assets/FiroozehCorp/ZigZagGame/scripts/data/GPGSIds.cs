@@ -26,16 +26,16 @@ namespace FiroozehCorp.ZigZagGame.scripts.data
 
         public static class GPGSIds
         {
-                public const string achievement_skilled_tapper = "CgkIt7nf-4gcEAIQCA"; // <GPGSID>
-                public const string achievement_apprentice_tapper = "CgkIt7nf-4gcEAIQBg"; // <GPGSID>
-                public const string achievement_respected_tapper = "CgkIt7nf-4gcEAIQCQ"; // <GPGSID>
-                public const string event_attempts = "CgkIt7nf-4gcEAIQAg"; // <GPGSID>
-                public const string achievement_experienced_tapper = "CgkIt7nf-4gcEAIQBw"; // <GPGSID>
-                public const string leaderboard_high_score = "CgkIt7nf-4gcEAIQAw"; // <GPGSID>
-                public const string event_high_score = "CgkIt7nf-4gcEAIQAQ"; // <GPGSID>
-                public const string achievement_feared_tapper = "CgkIt7nf-4gcEAIQCg"; // <GPGSID>
-                public const string achievement_starter_tapper = "CgkIt7nf-4gcEAIQBA"; // <GPGSID>
-                public const string achievement_novice_tapper = "CgkIt7nf-4gcEAIQBQ"; // <GPGSID>
+                public const string achievement_skilled_tapper = "achievement_skilled_tapper"; // <GPGSID>
+                public const string achievement_apprentice_tapper = "achievement_apprentice_tapper"; // <GPGSID>
+                public const string achievement_respected_tapper = "achievement_respected_tapper"; // <GPGSID>
+                public const string event_attempts = "event_attempts"; // <GPGSID>
+                public const string achievement_experienced_tapper = "achievement_experienced_tapper"; // <GPGSID>
+                public const string leaderboard_high_score = "leaderboard_high_score"; // <GPGSID>
+                public const string event_high_score = "event_high_score"; // <GPGSID>
+                public const string achievement_feared_tapper = "achievement_feared_tapper"; // <GPGSID>
+                public const string achievement_starter_tapper = "achievement_starter_tapper"; // <GPGSID>
+                public const string achievement_novice_tapper = "achievement_novice_tapper"; // <GPGSID>
 
         }
 }
