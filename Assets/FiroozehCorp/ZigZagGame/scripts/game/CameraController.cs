@@ -37,7 +37,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 			/// </summary>
 			public void StartEntrySequence() {
 				StopAllCoroutines();
-				StartCoroutine("RunEntrySequence");
+				StartCoroutine(nameof(RunEntrySequence));
 			}
 
 			/// <summary>
@@ -45,7 +45,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 			/// </summary>
 			IEnumerator RunEntrySequence() {
 				Vector3 entrySpeed = Vector3.zero;
-				float dist = Vector3.Distance(transform.position, targetEntry.position);
+				var dist = Vector3.Distance(transform.position, targetEntry.position);
 				while (dist > 0.02f) {
 					transform.position = Vector3.SmoothDamp(transform.position, targetEntry.position, ref entrySpeed, entryTime);
 					dist = Vector3.Distance(transform.position, targetEntry.position);
@@ -60,7 +60,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 			/// </summary>
 			public void StartLoseSequence() {
 				StopAllCoroutines();
-				StartCoroutine("RunLoseSequence");
+				StartCoroutine(nameof(RunLoseSequence));
 			}
 
 			/// <summary>
