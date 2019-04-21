@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/Library/Caches/Rider2018.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2018.2/resharper-host/local/Transient/ReSharperHost/v182/SolutionCaches/_ZigZag.507671706.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="FiroozehCorp" t="Include">
+          <e p="ZigZagGame" t="Include">
+            <e p="scripts" t="Include">
+              <e p="data" t="Include">
+                <e p="DataStorage.cs" t="Include" />
+                <e p="GPGSIds.cs" t="Include" />
+                <e p="ProgressManager.cs" t="Include" />
+                <e p="SessionManager.cs" t="Include" />
+              </e>
+              <e p="game" t="Include">
+                <e p="AudioManager.cs" t="Include" />
+                <e p="CameraController.cs" t="Include" />
+                <e p="GameManager.cs" t="Include" />
+                <e p="Orb.cs" t="Include" />
+                <e p="Pickup.cs" t="Include" />
+                <e p="Pool.cs" t="Include" />
+                <e p="SceneLoader.cs" t="Include" />
+                <e p="Shadow.cs" t="Include" />
+                <e p="TapController.cs" t="Include" />
+                <e p="Types.cs" t="Include" />
+                <e p="Wall.cs" t="Include" />
+                <e p="WallSpawner.cs" t="Include" />
+              </e>
+              <e p="menu" t="Include">
+                <e p="AudioToggleEvent.cs" t="Include" />
+                <e p="ButtonEvent.cs" t="Include" />
+                <e p="OpenAchievementsEvent.cs" t="Include" />
+                <e p="OpenLeaderboardsEvent.cs" t="Include" />
+                <e p="PageController.cs" t="Include" />
+                <e p="PageManager.cs" t="Include" />
+                <e p="StartGameEvent.cs" t="Include" />
+                <e p="StatText.cs" t="Include" />
+                <e p="WorldSpaceEvents.cs" t="Include" />
+              </e>
+            </e>
+            <e p="shaders" t="Include">
+              <e p="BasicSurface.shader" t="Include" />
+              <e p="BasicUnlit.shader" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="FiroozehGameServiceAndroid" t="Include">
+          <e p="Builders" t="Include">
+            <e p="FiroozehGameSerciveLogin.cs" t="Include" />
+            <e p="FiroozehGameServiceInitializer.cs" t="Include" />
+            <e p="GameServiceInitializer.cs" t="Include" />
+          </e>
+          <e p="Core" t="Include">
+            <e p="DelegateCore.cs" t="Include" />
+            <e p="GameServiceException.cs" t="Include" />
+            <e p="GameServicePluginHandler.cs" t="Include" />
+            <e p="PluginProvider.cs" t="Include" />
+          </e>
+          <e p="FiroozehGameService.cs" t="Include" />
+          <e p="Interfaces" t="Include">
+            <e p="IGameServiceCallback.cs" t="Include" />
+            <e p="IGameServiceLoginCheck.cs" t="Include" />
+          </e>
+          <e p="Models" t="Include">
+            <e p="Achievement.cs" t="Include" />
+            <e p="LeaderBoard.cs" t="Include" />
+            <e p="LeaderBoardDetails.cs" t="Include" />
+            <e p="Score.cs" t="Include" />
+            <e p="User.cs" t="Include" />
+          </e>
+          <e p="Utils" t="Include">
+            <e p="SystemInfoUtil.cs" t="Include" />
+          </e>
+        </e>
+        <e p="JsonDotNet" t="Include">
+          <e p="link.xml" t="Include" />
+        </e>
+      </e>
+      <e p="Library" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
+      <e p="ZigZag.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>
