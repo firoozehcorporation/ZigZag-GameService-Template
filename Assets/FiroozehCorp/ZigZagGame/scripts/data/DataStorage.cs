@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using FiroozehGameServiceAndroid;
+using FiroozehGameServiceAndroid.Models;
+using Newtonsoft.Json;
 using UnityEngine;
 
 #if UNITY_ANDROID
@@ -28,10 +32,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			static string USER_ID;
 
 			static int loadJobs;
-			static bool initialLoadBegan;
-			private static HashSet<string> unlockedAchiv = new HashSet<string>();
-			private static int deley = 0;
-			
+			static bool initialLoadBegan;			
 			
 			/// <summary>
 			/// Only called once per user.
@@ -51,12 +52,6 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				FetchEventForLocalStorage(GPGSIds.event_attempts);
 				FetchLeaderB‌‌oardForLocalStorage(GPGSIds.leaderboard_high_score);
 				
-				SessionManager.GameService?.GetSaveGame<Save>( save =>
-				{
-					SaveLocalData(GPGSIds.event_attempts, save.Attempts);
-					SaveLocalData(GPGSIds.leaderboard_high_score,save.HighScore);
-					
-				},error => {});
 				
 				
 				if (USER_ID != string.Empty) loadJobs += 2;
@@ -84,12 +79,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			#endif
 				
          #if UNITY_ANDROID
-				if (deley == 10)
-				{
-					SessionManager.GameService?.SubmitScore(leaderboardId, (int) score, success => { }, error => { });
-					deley = 0;
-				}
-				else deley++;
+			if(ProgressManager.HighScore % 100 == 0)
+	            SessionManager.GameService?.SubmitScore(leaderboardId, (int) score, success => { }, error => { });
+				
 #endif
 
 			}
@@ -130,13 +122,10 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			#endif
 				
                 #if UNITY_ANDROID
-				if (unlockedAchiv.Contains(achievementId)) return;
+				if (isAchievementUnlocked(achievementId)) return;
 				
 
-					SessionManager.GameService?.UnlockAchievement(achievementId, success =>
-					{
-						unlockedAchiv.Add(achievementId);
-					}, error => { });
+					SessionManager.GameService?.UnlockAchievement(achievementId, addAchievementToAchievementList, error => { });
 				
 #endif
 			}
@@ -163,6 +152,42 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				
 			}
 
+			public static void SaveDataFromGameService(FiroozehGameService gameService)
+			{
+				gameService?.GetSaveGame<Save>( save =>
+				{
+					SaveLocalData(GPGSIds.event_attempts, save.Attempts);
+					SaveLocalData(GPGSIds.leaderboard_high_score,save.HighScore);
+					
+				},error => {});
+				
+				gameService?.GetAchievements(achievements =>
+				{
+					SaveAchievementList("Achievements",achievements);
+				},e=>{});
+				
+				gameService?.GetLeaderBoards(leaderBoards =>
+				{
+					SaveLeaderBoardList("LeaderBoards",leaderBoards);
+				},e=>{});
+
+			}
+			
+			/// <summary>
+			/// Save a LeaderBoard to local
+			/// </summary>
+			public static void SaveLeaderBoardList(string dataId, List<LeaderBoard> data) {
+				PlayerPrefs.SetString(USER_ID+dataId,JsonConvert.SerializeObject(data));
+			}
+			
+			
+			/// <summary>
+			/// Save a Achievements to local
+			/// </summary>
+			public static void SaveAchievementList(string dataId, List<Achievement> data) {
+				PlayerPrefs.SetString(USER_ID+dataId,JsonConvert.SerializeObject(data));
+			}
+
 			/// <summary>
 			/// Request a leaderboard value from the remote server (cloud)
 			/// If no user is logged in, the local data for 'leaderboardId' is saved to player prefs
@@ -178,7 +203,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				loadJobs--;
 
             #if UNITY_ANDROID
-				SessionManager.GameService?.GetLeaderBoards(success => {},error => {});
+				
 			#elif UNITY_IOS
 				//ios implementation...if different
 				//dont forget to decrement load jobs
@@ -189,6 +214,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			/// Request an event value from the remote server (cloud)
 			/// If no user is logged in, the local data for 'eventId' is saved to player prefs
 			/// </summary>
+			/// 
 			static void FetchEventForLocalStorage(string eventId) {
 			#if UNITY_WEBGL
 				loadJobs--;
@@ -218,6 +244,23 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			}
 
-		}
+
+			private static bool isAchievementUnlocked(string key)
+			{
+				var data = PlayerPrefs.GetString(USER_ID + "Achievements");
+				var list = JsonConvert.DeserializeObject<List<Achievement>>(data);
+				return list.Any(a => a.key == key);
+			}
+
+			private static void addAchievementToAchievementList(Achievement achievement)
+			{
+				var data = PlayerPrefs.GetString(USER_ID + "Achievements");
+				var list = JsonConvert.DeserializeObject<List<Achievement>>(data);
+				 list.Add(achievement);
+				SaveAchievementList("Achievements",list);
+			}
+
+		}	
+
 	}
 }

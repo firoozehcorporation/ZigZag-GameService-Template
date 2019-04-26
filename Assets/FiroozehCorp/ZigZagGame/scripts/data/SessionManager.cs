@@ -65,13 +65,20 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 						.IsNotificationEnable(true)
 						.CheckGameServiceInstallStatus(true)
 						.CheckGameServiceOptionalUpdate(true)
-						.Init(g => { GameService = g; }, 
+						.Init(g =>
+					 { 
+						 GameService = g;
+						 DataStorage.SaveDataFromGameService(g);
+					 }, 
 							e =>
 							{
 								Debug.Log("FiroozehGameServiceInitializerError: "+e);
 							});
 						
-	
+							
+
+
+		
 			
 		#elif UNITY_IOS
 				//ios implementation...if different

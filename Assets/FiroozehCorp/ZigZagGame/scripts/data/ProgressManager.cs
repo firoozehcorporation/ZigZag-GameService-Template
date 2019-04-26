@@ -16,7 +16,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			
 
 			public int Attempts => DataStorage.GetLocalData(GPGSIds.event_attempts);
-			public int HighScore => DataStorage.GetLocalData(GPGSIds.leaderboard_high_score);
+			public static int HighScore => DataStorage.GetLocalData(GPGSIds.leaderboard_high_score);
 			public int Score => score;
 			
 

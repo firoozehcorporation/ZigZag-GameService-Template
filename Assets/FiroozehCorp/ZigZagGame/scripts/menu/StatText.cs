@@ -54,7 +54,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.menu {
 			#elif !UNITY_WEBGL
 				switch (statType) {
 					case StatType.HighScore:
-						txt.text = FarsiTextUtil.Fix("بیشترین امتیاز : " + progress.HighScore);
+						txt.text = FarsiTextUtil.Fix("بیشترین امتیاز : " + ProgressManager.HighScore);
 						break;
 					case StatType.Attempts:
 						txt.text = FarsiTextUtil.Fix("تعداد بازی : "+ progress.Attempts);
