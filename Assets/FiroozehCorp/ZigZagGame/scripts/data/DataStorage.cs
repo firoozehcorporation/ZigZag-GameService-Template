@@ -109,25 +109,11 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			/// <summary>
 			/// Standard Achievement set function
 			/// </summary>
-			public static void UnlockAchievement(string achievementId) {
-			#if UNITY_WEBGL
-				return; //no achievements on webgl
-			#endif
-				if (achievementId == string.Empty) {
-					return;
-				}
-
-			#if UNITY_ANDROID || UNITY_IOS
-				Social.ReportProgress(achievementId, 100.0f, success => {});
-			#endif
-				
+			public static void UnlockAchievement(string achievementId) {	
                 #if UNITY_ANDROID
 				if (isAchievementUnlocked(achievementId)) return;
-				
-
 					SessionManager.GameService?.UnlockAchievement(achievementId, addAchievementToAchievementList, error => { });
-				
-#endif
+                #endif
 			}
 
 			/// <summary>
@@ -156,6 +142,10 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			{
 				gameService?.GetSaveGame<Save>( save =>
 				{
+					ProgressManager.HighScore = save.HighScore;
+					ProgressManager.Attempts = save.Attempts;
+					ProgressManager.Score = save.Score;
+					
 					SaveLocalData(GPGSIds.event_attempts, save.Attempts);
 					SaveLocalData(GPGSIds.leaderboard_high_score,save.HighScore);
 					
@@ -249,7 +239,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			{
 				var data = PlayerPrefs.GetString(USER_ID + "Achievements");
 				var list = JsonConvert.DeserializeObject<List<Achievement>>(data);
-				return list.Any(a => a.key == key);
+				return list.Find(a => a.key == key).earned;
 			}
 
 			private static void addAchievementToAchievementList(Achievement achievement)

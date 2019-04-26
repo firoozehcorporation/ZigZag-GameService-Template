@@ -57,10 +57,10 @@ namespace FiroozehCorp.ZigZagGame.scripts.menu {
 						txt.text = FarsiTextUtil.Fix("بیشترین امتیاز : " + ProgressManager.HighScore);
 						break;
 					case StatType.Attempts:
-						txt.text = FarsiTextUtil.Fix("تعداد بازی : "+ progress.Attempts);
+						txt.text = FarsiTextUtil.Fix("تعداد بازی : "+ ProgressManager.Attempts);
 						break;
 					case StatType.Score:
-						txt.text = FarsiTextUtil.Fix( "امتیاز : "+ progress.Score);
+						txt.text = FarsiTextUtil.Fix( "امتیاز : "+ ProgressManager.Score);
 						break;
 					case StatType.About:
 						txt.text = FarsiTextUtil.Fix(
@@ -88,8 +88,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.menu {
 			/// Update score text while the player zigs and zags
 			/// </summary>
 			void Update() {
-				if (statType != StatType.Score) return;
-				txt.text = FarsiTextUtil.Fix(progress.Score + " امتیاز ");
+				if (statType != StatType.Score) StartCoroutine(nameof(WaitToDisplay));
+				else
+				txt.text = FarsiTextUtil.Fix(ProgressManager._score + " امتیاز ");
 			}
 		}
 	}

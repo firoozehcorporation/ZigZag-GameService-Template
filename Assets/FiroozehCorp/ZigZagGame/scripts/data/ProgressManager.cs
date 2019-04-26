@@ -13,11 +13,11 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 		public class ProgressManager : MonoBehaviour {
 
 			public static ProgressManager Instance;
-			
 
-			public int Attempts => DataStorage.GetLocalData(GPGSIds.event_attempts);
-			public static int HighScore => DataStorage.GetLocalData(GPGSIds.leaderboard_high_score);
-			public int Score => score;
+
+			public static int Attempts;
+			public static int HighScore; 
+			public static int Score = 0;
 			
 
 			public bool AudioOn { 
@@ -29,12 +29,16 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				} 
 			}
 
-			int score = 0;
+			public static int _score = 0;
 
 			/// <summary>
 			/// Singleton pattern. Only one Progress Manager allowed
 			/// </summary>
 			void Awake() {
+				
+				Attempts = DataStorage.GetLocalData(GPGSIds.event_attempts);
+				HighScore = DataStorage.GetLocalData(GPGSIds.leaderboard_high_score);
+				
 				if (Instance != null) {
 					Destroy(gameObject);
 				}
@@ -56,16 +60,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			/// Reset score
 			/// </summary>
 			public void ResetScore() {
-				
-				SessionManager.GameService?.SaveGame(
-					"ZigZagGame"
-					,"ZigZagGameSave"
-					,null
-					,new Save {Attempts = Attempts, HighScore = HighScore, Score = Score}
-					,success => {},error => {}
-				);
-				
-				score = 0;
+				_score = 0;
 			}
 
 			/// <summary>
@@ -73,9 +68,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			/// Determine if an achievement should be unlocked
 			/// </summary>
 			public void AddScore(int value) {
-				score += value;
-				if (score > HighScore) {
-					DataStorage.ReportLeaderboardScore(GPGSIds.leaderboard_high_score, (uint)score);
+				_score += value;
+				if (_score > HighScore) {
+					DataStorage.ReportLeaderboardScore(GPGSIds.leaderboard_high_score, (uint)_score);
 				}
 						
 				CheckScoreAchievementUnlock();
@@ -93,25 +88,25 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			/// Unlock achievement
 			/// </summary>
 			void CheckScoreAchievementUnlock() {
-				if (score >= 5000) {
+				if (_score >= 5000) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_feared_tapper);
 				}
-				if (score >= 1000) {
+				if (_score >= 1000) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_respected_tapper);
 				}
-				if (score >= 500) {
+				if (_score >= 500) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_skilled_tapper);
 				}
-				if (score >= 250) {
+				if (_score >= 250) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_experienced_tapper);
 				}
-				if (score >= 100) {
+				if (_score >= 100) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_apprentice_tapper);
 				}
-				if (score >= 50) {
+				if (_score >= 50) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_novice_tapper);
 				}
-				if (score >= 10) {
+				if (_score >= 10) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_starter_tapper);
 				}
 			}

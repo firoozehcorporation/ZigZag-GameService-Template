@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using FiroozehCorp.ZigZagGame.scripts.data;
 using FiroozehCorp.ZigZagGame.scripts.data.ZigZag;
 using FiroozehCorp.ZigZagGame.scripts.game.ZigZag.Types;
 using FiroozehCorp.ZigZagGame.scripts.menu.ZigZag;
@@ -149,6 +150,16 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 				pageManager.TurnPageOn(PageType.GameOver, PageType.Fade);
 				StopCoroutine(nameof(ReloadScene));
 				StartCoroutine(nameof(ReloadScene));
+				
+					
+				SessionManager.GameService?.SaveGame(
+					"ZigZagGame"
+					,"ZigZagGameSave"
+					,null
+					,new Save {Attempts = ProgressManager.Attempts, HighScore = ProgressManager.HighScore, Score = ProgressManager.Score}
+					,success => {},error => {}
+				);
+
 			}
 
 			/// <summary>
