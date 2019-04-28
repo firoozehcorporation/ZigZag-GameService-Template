@@ -33,7 +33,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			static int loadJobs;
 			static bool initialLoadBegan;
-			private static List<Achievement> _achievements = new List<Achievement>();
+			private static HashSet<Achievement> _achievements = new HashSet<Achievement>();
 			
 			/// <summary>
 			/// Only called once per user.
@@ -101,7 +101,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
                 #if UNITY_ANDROID
 				
 				if (isAchievementUnlocked(achievementId)) 
-					Debug.LogError("isAchievementUnlocked!");
+					Debug.LogError(achievementId + " isAchievementUnlocked!");
 				else
 				{
 					Debug.LogError("Achievement"+achievementId+"NotUnlocked");
@@ -149,7 +149,11 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				
 				gameService?.GetAchievements(achievements =>
 				{
-					_achievements.AddRange(achievements);
+					achievements.ForEach(a =>
+					{
+						_achievements.Add(a);
+					});
+	
 					SaveAchievementList("Achievements",achievements);
 				},e=>{});
 				
@@ -234,7 +238,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			private static bool isAchievementUnlocked(string key)
 			{
-				return _achievements.Find(a => a.key == key).earned;
+				return _achievements.Any(a => a.key == key && a.earned);
 			}
 
 		}	

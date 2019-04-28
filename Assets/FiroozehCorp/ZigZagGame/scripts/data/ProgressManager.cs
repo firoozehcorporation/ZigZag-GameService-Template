@@ -91,22 +91,22 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				if (_score >= 5000) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_feared_tapper);
 				}
-				if (_score >= 1000) {
+				else if (_score >= 1000) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_respected_tapper);
 				}
-				if (_score >= 500) {
+				else if (_score >= 500) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_skilled_tapper);
 				}
-				if (_score >= 250) {
+				else if (_score >= 250) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_experienced_tapper);
 				}
-				if (_score >= 100) {
+				else if (_score >= 100) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_apprentice_tapper);
 				}
-				if (_score >= 50) {
+				else if (_score >= 50) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_novice_tapper);
 				}
-				if (_score >= 10) {
+				else if (_score >= 10) {
 					DataStorage.UnlockAchievement(GPGSIds.achievement_starter_tapper);
 				}
 			}
