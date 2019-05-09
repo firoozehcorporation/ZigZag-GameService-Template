@@ -26,7 +26,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.menu {
 		
 			}
 			public StatType statType;
-			public string prefix;
+			public string preFixText;
 
 			Text txt;
 			ProgressManager progress;
@@ -54,29 +54,29 @@ namespace FiroozehCorp.ZigZagGame.scripts.menu {
 			#elif !UNITY_WEBGL
 				switch (statType) {
 					case StatType.HighScore:
-						txt.text = FarsiTextUtil.Fix("بیشترین امتیاز : " + ProgressManager.HighScore);
+						txt.text = FarsiTextUtil.FixText("بیشترین امتیاز : " + ProgressManager.HighScore);
 						break;
 					case StatType.Attempts:
-						txt.text = FarsiTextUtil.Fix("تعداد بازی : "+ ProgressManager.Attempts);
+						txt.text = FarsiTextUtil.FixText("تعداد بازی : "+ ProgressManager.Attempts);
 						break;
 					case StatType.Score:
-						txt.text = FarsiTextUtil.Fix( "امتیاز : "+ ProgressManager.Score);
+						txt.text = FarsiTextUtil.FixText( "امتیاز : "+ ProgressManager.Score);
 						break;
 					case StatType.About:
-						txt.text = FarsiTextUtil.Fix(
+						txt.text = FarsiTextUtil.FixText(
 							"بازی زیگزاگ \n قدرت گرفته از ");
 						break;
 					case StatType.Start:
-						txt.text = FarsiTextUtil.Fix("شروع بازی");
+						txt.text = FarsiTextUtil.FixText("شروع بازی");
 						break;
 					case StatType.Continue:
-						txt.text = FarsiTextUtil.Fix("دوباره");
+						txt.text = FarsiTextUtil.FixText("دوباره");
 						break;
 					case StatType.GameName:
-						txt.text = FarsiTextUtil.Fix("زیگزاگ");
+						txt.text = FarsiTextUtil.FixText("زیگزاگ");
 						break;
 					case StatType.GameDescription:
-						txt.text = FarsiTextUtil.Fix("قدرت گرفته از");
+						txt.text = FarsiTextUtil.FixText("قدرت گرفته از");
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -90,7 +90,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.menu {
 			void Update() {
 				if (statType != StatType.Score) StartCoroutine(nameof(WaitToDisplay));
 				else
-				txt.text = FarsiTextUtil.Fix(ProgressManager._score + " امتیاز ");
+				txt.text = FarsiTextUtil.FixText(ProgressManager._score + " امتیاز ");
 			}
 		}
 	}

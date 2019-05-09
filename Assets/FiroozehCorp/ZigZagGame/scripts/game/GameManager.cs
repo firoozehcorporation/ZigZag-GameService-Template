@@ -5,6 +5,7 @@ using FiroozehCorp.ZigZagGame.scripts.game.ZigZag.Types;
 using FiroozehCorp.ZigZagGame.scripts.menu.ZigZag;
 using FiroozehGameServiceAndroid;
 using FiroozehGameServiceAndroid.Builders;
+using FiroozehGameServiceAndroid.Core;
 using UnityEngine;
 
 namespace FiroozehCorp.ZigZagGame.scripts.game {
@@ -152,12 +153,15 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 				StartCoroutine(nameof(ReloadScene));
 				
 					
-				SessionManager.GameService?.SaveGame(
+				FiroozehGameService.Instance.SaveGame(
 					"ZigZagGame"
 					,"ZigZagGameSave"
 					,null
 					,new Save {Attempts = ProgressManager.Attempts, HighScore = ProgressManager.HighScore, Score = ProgressManager.Score}
-					,success => {},error => {}
+					, detail =>
+					{
+					
+					},error => {}
 				);
 
 			}

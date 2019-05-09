@@ -1,6 +1,25 @@
+// <copyright file="FarsiTextUtil.cs" company="Firoozeh Technology LTD">
+// Copyright (C) 2019 Firoozeh Technology LTD. All Rights Reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//    limitations under the License.
+// </copyright>
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+// Used From https://github.com/Konash/arabic-support-unity
 
 namespace FiroozehGameServiceAndroid.Utils
 {
@@ -12,39 +31,41 @@ namespace FiroozehGameServiceAndroid.Utils
 		/// <param name='str'>
 		/// String to be fixed.
 		/// </param>
-		public static string Fix(string str)
+		public static string FixText(string str)
 		{
 			return Fix(str, false, true);
 		}
 		
-		public static string Fix(string str, bool rtl)
+		public static string FixText(string str, bool rtl)
 		{
 			if(rtl)
 				
 			{
-				return Fix(str);
+				return FixText(str);
 			}
-
-			var words = str.Split(' ');
-			var result = "";
-			var arabicToIgnore = "";
-			foreach(var word in words)
+			else
 			{
-				if(char.IsLower(word.ToLower()[word.Length/2]))
+				string[] words = str.Split(' ');
+				string result = "";
+				string arabicToIgnore = "";
+				foreach(string word in words)
 				{
-					result += Fix(arabicToIgnore) + word + " ";
-					arabicToIgnore = "";
-				}
-				else
-				{
-					arabicToIgnore += word + " ";
+					if(char.IsLower(word.ToLower()[word.Length/2]))
+					{
+						result += FixText(arabicToIgnore) + word + " ";
+						arabicToIgnore = "";
+					}
+					else
+					{
+						arabicToIgnore += word + " ";
 						
+					}
 				}
-			}
-			if(arabicToIgnore != "")
-				result += Fix(arabicToIgnore);
+				if(arabicToIgnore != "")
+					result += FixText(arabicToIgnore);
 				
-			return result;
+				return result;
+			}
 		}
 		
 		/// <summary>
@@ -66,18 +87,17 @@ namespace FiroozehGameServiceAndroid.Utils
 			
 			if(str.Contains("\n"))
 				str = str.Replace("\n", Environment.NewLine);
-
-			if (!str.Contains(Environment.NewLine)) return ArabicFixerTool.FixLine(str);
-			var stringSeparators = new[] {Environment.NewLine};
-			var strSplit = str.Split(stringSeparators, StringSplitOptions.None);
-				
-			switch (strSplit.Length)
+			
+			if(str.Contains(Environment.NewLine))
 			{
-				case 0:
+				string[] stringSeparators = new string[] {Environment.NewLine};
+				string[] strSplit = str.Split(stringSeparators, StringSplitOptions.None);
+				
+				if(strSplit.Length == 0)
 					return ArabicFixerTool.FixLine(str);
-				case 1:
+				else if(strSplit.Length == 1)
 					return ArabicFixerTool.FixLine(str);
-				default:
+				else
 				{
 					var outputString = ArabicFixerTool.FixLine(strSplit[0]);
 					var iteration = 1;
@@ -88,8 +108,10 @@ namespace FiroozehGameServiceAndroid.Utils
 						iteration++;
 					}
 					return outputString;
-				}
+				}	
 			}
+
+			return ArabicFixerTool.FixLine(str);
 
 		}
 
@@ -297,12 +319,7 @@ internal class ArabicTable
 	/// </summary>
 	internal static ArabicTable ArabicMapper
 	{
-		get
-		{
-			if (arabicMapper == null)
-				arabicMapper = new ArabicTable();
-			return arabicMapper;
-		}
+		get { return arabicMapper ?? (arabicMapper = new ArabicTable()); }
 	}
 	
 	internal int Convert(int toBeConverted)
@@ -337,11 +354,11 @@ internal class ArabicFixerTool
 	internal static bool showTashkeel = true;
     internal static bool combineTashkeel = true;
     internal static bool useHinduNumbers = false;
-	
-	
-	internal static string RemoveTashkeel(string str, out Boo.Lang.List<TashkeelLocation> tashkeelLocation)
+
+
+	private static string RemoveTashkeel(string str, out List<TashkeelLocation> tashkeelLocation)
 	{
-		tashkeelLocation = new Boo.Lang.List<TashkeelLocation>();
+		tashkeelLocation = new List<TashkeelLocation>();
 		var letters = str.ToCharArray();
 
 		var index = 0;
@@ -457,8 +474,8 @@ internal class ArabicFixerTool
 
 		return split.Aggregate("", (current, s) => current + s);
 	}
-
-	private static char[] ReturnTashkeel(char[] letters, Boo.Lang.List<TashkeelLocation> tashkeelLocation)
+	
+	internal static char[] ReturnTashkeel(char[] letters, List<TashkeelLocation> tashkeelLocation)
 	{
 		char[] lettersWithTashkeel = new char[letters.Length + tashkeelLocation.Count];
 		
@@ -485,18 +502,18 @@ internal class ArabicFixerTool
 	/// <returns>Converted string. Example: "aa aaa A" without the spaces.</returns>
 	internal static string FixLine(string str)
 	{
-		var test = "";
+		string test = "";
 
-		Boo.Lang.List<TashkeelLocation> tashkeelLocation;
+		List<TashkeelLocation> tashkeelLocation;
 		
-		var originString = RemoveTashkeel(str, out tashkeelLocation);
+		string originString = RemoveTashkeel(str, out tashkeelLocation);
 		
-		var lettersOrigin = originString.ToCharArray();
-		var lettersFinal = originString.ToCharArray();
+		char[] lettersOrigin = originString.ToCharArray();
+		char[] lettersFinal = originString.ToCharArray();
 		
 
 		
-		for (var i = 0; i < lettersOrigin.Length; i++)
+		for (int i = 0; i < lettersOrigin.Length; i++)
 		{
 			lettersOrigin[i] = (char)ArabicTable.ArabicMapper.Convert(lettersOrigin[i]);
 		}
@@ -599,9 +616,9 @@ internal class ArabicFixerTool
 			lettersFinal = ReturnTashkeel(lettersFinal, tashkeelLocation);
 
 
-		Boo.Lang.List<char> list = new Boo.Lang.List<char>();
+		List<char> list = new List<char>();
 
-		Boo.Lang.List<char> numberList = new Boo.Lang.List<char>();
+		List<char> numberList = new List<char>();
 		
 		for (var i = lettersFinal.Length - 1; i >= 0; i--)
 		{
@@ -694,7 +711,7 @@ internal class ArabicFixerTool
 			{
 				if (numberList.Count > 0)
 				{
-					for (int j = 0; j < numberList.Count; j++)
+					for (var j = 0; j < numberList.Count; j++)
 						list.Add(numberList[numberList.Count - 1 - j]);
 					numberList.Clear();
 				}
@@ -725,7 +742,7 @@ internal class ArabicFixerTool
 	/// </summary>
 	/// <param name="ch">The character to be checked for skipping</param>
 	/// <returns>True if the character should be ignored, false if it should not be ignored.</returns>
-	internal static bool IsIgnoredCharacter(char ch)
+	private static bool IsIgnoredCharacter(char ch)
 	{
 		bool isPunctuation = char.IsPunctuation(ch);
 		bool isNumber = char.IsNumber(ch);
@@ -764,7 +781,7 @@ internal class ArabicFixerTool
 	/// <param name="letters">The whole word that contains the character to be checked</param>
 	/// <param name="index">The index of the character to be checked</param>
 	/// <returns>True if the character at index is a leading character, else, returns false</returns>
-	internal static bool IsLeadingLetter(char[] letters, int index)
+	private static bool IsLeadingLetter(char[] letters, int index)
 	{
 
 		var lettersThatCannotBeBeforeALeadingLetter = index == 0 
@@ -788,7 +805,7 @@ internal class ArabicFixerTool
                 || letters[index - 1] == (int)IsolatedArabicLetters.AlefMaksoor 
 				|| letters[index - 1] == (int)IsolatedArabicLetters.WawHamza;
 
-		bool lettersThatCannotBeALeadingLetter = letters[index] != ' ' 
+		var lettersThatCannotBeALeadingLetter = letters[index] != ' ' 
 			&& letters[index] != (int)IsolatedArabicLetters.Dal
 			&& letters[index] != (int)IsolatedArabicLetters.Thal
 				&& letters[index] != (int)IsolatedArabicLetters.Ra2 

@@ -3,6 +3,8 @@ using System.Collections;
 using FiroozehCorp.ZigZagGame.scripts.game.ZigZag;
 using FiroozehGameServiceAndroid;
 using FiroozehGameServiceAndroid.Builders;
+using FiroozehGameServiceAndroid.Core;
+using FiroozehGameServiceAndroid.Enums;
 using UnityEngine;
 
 #if UNITY_ANDROID
@@ -58,25 +60,19 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			
 			void ConfigureGameService() {
 		#if UNITY_ANDROID
-				
-			if(GameService == null)
-			 FiroozehGameServiceInitializer
-				.With("Your clientId","Your clientSecret")
-						.IsNotificationEnable(true)
-						.CheckGameServiceInstallStatus(true)
-						.CheckGameServiceOptionalUpdate(true)
-						.Init(g =>
-					 { 
-						 GameService = g;
-						 DataStorage.SaveDataFromGameService(g);
-					 }, 
-							e =>
-							{
-								Debug.Log("FiroozehGameServiceInitializerError: "+e);
-							});
-						
-							
 
+				var config = new GameServiceClientConfiguration
+					.Builder(InstanceType.Auto)
+					.SetClientId("Your clientId")
+					.SetClientSecret("Your clientSecret")
+					.IsLogEnable(true)
+					.CheckGameServiceInstallStatus(true)
+					.CheckGameServiceOptionalUpdate(false)
+					.Build();
+				
+				FiroozehGameService.ConfigurationInstance(config);
+				FiroozehGameService.Run(DataStorage.GetDataFromGameService,Debug.LogError);
+		
 
 		
 			
@@ -116,7 +112,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			public void ShowAchievements() {
 		#if UNITY_ANDROID
-				GameService?.ShowAchievementsUI(error=>{});
+				FiroozehGameService.Instance.ShowAchievementsUI(error=>{});
 		#elif UNITY_IOS
 				//ios implementation...if different
 		#endif
@@ -124,7 +120,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			public void ShowLeaderboard() {
 		#if UNITY_ANDROID
-				GameService?.ShowLeaderBoardsUI(error=>{});
+				FiroozehGameService.Instance.ShowLeaderBoardsUI(error=>{});
 		#elif UNITY_IOS
 				//ios implementation...if different
 		#endif

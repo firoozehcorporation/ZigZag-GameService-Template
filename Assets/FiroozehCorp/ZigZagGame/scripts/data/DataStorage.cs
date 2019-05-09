@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FiroozehGameServiceAndroid;
+using FiroozehGameServiceAndroid.Core;
 using FiroozehGameServiceAndroid.Models;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -69,7 +70,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
          #if UNITY_ANDROID
 				SaveLocalData(leaderboardId, (int)score);
 			if(ProgressManager._score % 100 == 0)
-	            SessionManager.GameService?.SubmitScore(leaderboardId, (int) score, success => { }, error => { });
+	           FiroozehGameService.Instance.SubmitScore(leaderboardId, (int) score, success => { }, error => { });
 			#endif
 
 			}
@@ -106,7 +107,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				{
 					Debug.LogError("Achievement"+achievementId+"NotUnlocked");
 					_achievements.Add(new Achievement {earned = true , key = achievementId});
-					SessionManager.GameService?.UnlockAchievement(achievementId, a => {},
+					FiroozehGameService.Instance.UnlockAchievement(achievementId, a => {},
 						error => { });
 				}
 #endif
@@ -134,9 +135,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				
 			}
 
-			public static void SaveDataFromGameService(FiroozehGameService gameService)
+			public static void GetDataFromGameService()
 			{
-				gameService?.GetSaveGame<Save>(save =>
+				FiroozehGameService.Instance.GetSaveGame<Save>(save =>
 				{
 					ProgressManager.HighScore = save.HighScore;
 					ProgressManager.Attempts = save.Attempts;
@@ -147,7 +148,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 					
 				},error => {});
 				
-				gameService?.GetAchievements(achievements =>
+				FiroozehGameService.Instance.GetAchievements(achievements =>
 				{
 					achievements.ForEach(a =>
 					{
@@ -157,7 +158,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 					SaveAchievementList("Achievements",achievements);
 				},e=>{});
 				
-				gameService?.GetLeaderBoards(leaderBoards =>
+				FiroozehGameService.Instance.GetLeaderBoards(leaderBoards =>
 				{
 					SaveLeaderBoardList("LeaderBoards",leaderBoards);
 				},e=>{});
