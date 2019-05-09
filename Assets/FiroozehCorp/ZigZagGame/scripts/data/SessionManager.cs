@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using FiroozehCorp.ZigZagGame.scripts.game.ZigZag;
-using FiroozehGameServiceAndroid;
 using FiroozehGameServiceAndroid.Builders;
 using FiroozehGameServiceAndroid.Core;
 using FiroozehGameServiceAndroid.Enums;
