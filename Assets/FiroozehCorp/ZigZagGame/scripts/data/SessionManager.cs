@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using FiroozehCorp.ZigZagGame.scripts.game.ZigZag;
+using FiroozehGameServiceAndroid;
 using FiroozehGameServiceAndroid.Builders;
 using FiroozehGameServiceAndroid.Core;
 using FiroozehGameServiceAndroid.Enums;
@@ -64,6 +66,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 					.SetClientId("Your clientId")
 					.SetClientSecret("Your clientSecret")
 					.IsLogEnable(true)
+					.IsNotificationEnable(true)
 					.CheckGameServiceInstallStatus(true)
 					.CheckGameServiceOptionalUpdate(false)
 					.Build();

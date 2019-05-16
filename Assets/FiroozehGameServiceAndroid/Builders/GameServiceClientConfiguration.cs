@@ -27,7 +27,7 @@ namespace FiroozehGameServiceAndroid.Builders
     #if UNITY_ANDROID
     public class GameServiceClientConfiguration
     {
-
+        
         private readonly bool _haveNotification;
         private readonly bool _checkAppStatus;
         private readonly bool _checkOptionalUpdate;
