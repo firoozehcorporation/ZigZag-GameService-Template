@@ -61,10 +61,11 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 			void ConfigureGameService() {
 		#if UNITY_ANDROID
 
+				//.With("Your clientId","Your clientSecret")
 				var config = new GameServiceClientConfiguration
 					.Builder(InstanceType.Auto)
-					.SetClientId("Your clientId")
-					.SetClientSecret("Your clientSecret")
+					.SetClientId("Your ClientId")
+					.SetClientSecret("Your ClientSecret")
 					.IsLogEnable(true)
 					.IsNotificationEnable(true)
 					.CheckGameServiceInstallStatus(true)
