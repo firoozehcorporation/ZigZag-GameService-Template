@@ -156,7 +156,6 @@ namespace FiroozehCorp.ZigZagGame.scripts.game {
 				FiroozehGameService.Instance.SaveGame(
 					"ZigZagGame"
 					,"ZigZagGameSave"
-					,null
 					,new Save {Attempts = ProgressManager.Attempts, HighScore = ProgressManager.HighScore, Score = ProgressManager.Score}
 					, detail =>
 					{

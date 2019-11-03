@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using FiroozehCorp.ZigZagGame.scripts.game.ZigZag;
 using FiroozehGameServiceAndroid;
@@ -20,13 +20,13 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 		public class SessionManager : MonoBehaviour {
 
 			public static SessionManager Instance;
-			public static FiroozehGameService GameService;
+		
 
 			private string userId { get; set; }
 			public bool validUser { 
 				get { 
 				#if UNITY_ANDROID
-					return GameService != null;
+					return true;
 				#elif UNITY_IOS
 					//return //ios implementation...if different
 				#endif
@@ -62,25 +62,30 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 		#if UNITY_ANDROID
 
 				var config = new GameServiceClientConfiguration
-					.Builder(InstanceType.Auto)
-					.SetClientId("Your ClientId")
-					.SetClientSecret("Your ClientSecret")
+					.Builder(LoginType.Normal)
+					.SetClientId("GameService_ZigZag")
+					.SetClientSecret("styo69b77wr6x3p3uw9jp9")
 					.IsLogEnable(true)
 					.IsNotificationEnable(true)
+					.SetNotificationListener(NotificationListener)
 					.CheckGameServiceInstallStatus(true)
 					.CheckGameServiceOptionalUpdate(false)
 					.Build();
 				
 				FiroozehGameService.ConfigurationInstance(config);
 				FiroozehGameService.Run(DataStorage.GetDataFromGameService,Debug.LogError);
-		
 
-		
-			
+
 		#elif UNITY_IOS
 				//ios implementation...if different
 		#endif
 				Social.localUser.Authenticate(ProcessAuthentication);
+			}
+
+
+			void NotificationListener(string jsonData)
+			{
+				Debug.LogError("NotificationListener : " + jsonData);
 			}
 
 			/// <summary>
@@ -113,7 +118,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			public void ShowAchievements() {
 		#if UNITY_ANDROID
-				FiroozehGameService.Instance.ShowAchievementsUI(error=>{});
+				FiroozehGameService.Instance.ShowAchievementsUi(error=>{});
 		#elif UNITY_IOS
 				//ios implementation...if different
 		#endif
@@ -121,7 +126,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			public void ShowLeaderboard() {
 		#if UNITY_ANDROID
-				FiroozehGameService.Instance.ShowLeaderBoardsUI(error=>{});
+				FiroozehGameService.Instance.ShowLeaderBoardsUi(error=>{});
 		#elif UNITY_IOS
 				//ios implementation...if different
 		#endif

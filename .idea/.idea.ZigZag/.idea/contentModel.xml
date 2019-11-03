@@ -10,12 +10,14 @@
           <e p="ZigZagGame" t="Include">
             <e p="scripts" t="Include">
               <e p="data" t="Include">
+                <e p="BucketTypeTest.cs" t="Include" />
                 <e p="DataStorage.cs" t="Include" />
                 <e p="GPGSIds.cs" t="Include" />
                 <e p="ProgressManager.cs" t="Include" />
                 <e p="Save.cs" t="Include" />
                 <e p="SessionManager.cs" t="Include" />
               </e>
+              <e p="FarsiTextUtil.cs" t="Include" />
               <e p="game" t="Include">
                 <e p="AudioManager.cs" t="Include" />
                 <e p="CameraController.cs" t="Include" />
@@ -69,6 +71,15 @@
             <e p="DelegateCore.cs" t="Include" />
             <e p="FiroozehGameService.cs" t="Include" />
             <e p="GameServiceException.cs" t="Include" />
+            <e p="GSLive" t="Include">
+              <e p="GSLive.cs" t="Include" />
+              <e p="GSLiveChat.cs" t="Include" />
+              <e p="GSLiveErrors.cs" t="Include" />
+              <e p="GSLiveOption.cs" t="Include" />
+              <e p="GSLivePluginProvider.cs" t="Include" />
+              <e p="GSLiveRT.cs" t="Include" />
+              <e p="GSLiveTB.cs" t="Include" />
+            </e>
             <e p="Native" t="Include">
               <e p="NativePluginHandler.cs" t="Include" />
               <e p="NativePluginProvider.cs" t="Include" />
@@ -77,17 +88,69 @@
           </e>
           <e p="Enums" t="Include">
             <e p="GameServiceType.cs" t="Include" />
-            <e p="InstanceType.cs" t="Include" />
+            <e p="GSLive" t="Include">
+              <e p="AutoMatchStatus.cs" t="Include" />
+              <e p="GSLiveType.cs" t="Include" />
+              <e p="JoinType.cs" t="Include" />
+              <e p="RT" t="Include">
+                <e p="EventType.cs" t="Include" />
+                <e p="MessageType.cs" t="Include" />
+              </e>
+              <e p="TB" t="Include">
+                <e p="EventType.cs" t="Include" />
+              </e>
+            </e>
+            <e p="LoginType.cs" t="Include" />
           </e>
           <e p="GameService.cs" t="Include" />
           <e p="Interfaces" t="Include">
             <e p="App" t="Include">
               <e p="IGameServiceLoginCheck.cs" t="Include" />
             </e>
+            <e p="GSLive" t="Include">
+              <e p="Chat" t="Include">
+                <e p="GSLiveChatListener.cs" t="Include" />
+                <e p="IChatListener.cs" t="Include" />
+              </e>
+              <e p="Command" t="Include">
+                <e p="GSLiveCommandListeners.cs" t="Include" />
+              </e>
+              <e p="RT" t="Include">
+                <e p="GSLiveRealTimeListener.cs" t="Include" />
+                <e p="IEventListener.cs" t="Include" />
+              </e>
+              <e p="TB" t="Include">
+                <e p="GSLiveTurnBasedListener.cs" t="Include" />
+                <e p="IEventListener.cs" t="Include" />
+              </e>
+            </e>
             <e p="IGameServiceCallback.cs" t="Include" />
+            <e p="IGSNotificationListener.cs" t="Include" />
           </e>
           <e p="Models" t="Include">
             <e p="Achievement.cs" t="Include" />
+            <e p="Bucket.cs" t="Include" />
+            <e p="GSLive" t="Include">
+              <e p="Chat" t="Include">
+                <e p="Chat.cs" t="Include" />
+              </e>
+              <e p="Game.cs" t="Include" />
+              <e p="Invite.cs" t="Include" />
+              <e p="JoinData.cs" t="Include" />
+              <e p="Leave.cs" t="Include" />
+              <e p="Member.cs" t="Include" />
+              <e p="Room.cs" t="Include" />
+              <e p="RoomData.cs" t="Include" />
+              <e p="RT" t="Include">
+                <e p="Message.cs" t="Include" />
+              </e>
+              <e p="TB" t="Include">
+                <e p="Complete.cs" t="Include" />
+                <e p="Finish.cs" t="Include" />
+                <e p="Outcome.cs" t="Include" />
+                <e p="Turn.cs" t="Include" />
+              </e>
+            </e>
             <e p="LeaderBoard.cs" t="Include" />
             <e p="LeaderBoardDetails.cs" t="Include" />
             <e p="SaveDetails.cs" t="Include" />
@@ -95,7 +158,6 @@
             <e p="User.cs" t="Include" />
           </e>
           <e p="Utils" t="Include">
-            <e p="FarsiTextUtil.cs" t="Include" />
             <e p="LogUtil.cs" t="Include" />
           </e>
         </e>
@@ -106,7 +168,9 @@
       <e p="Library" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
-      <e p="Temp/bin" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
       <e p="ZigZag.sln" t="IncludeFlat" />
     </e>
   </component>

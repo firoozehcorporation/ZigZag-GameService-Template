@@ -3,6 +3,7 @@ using System.Linq;
 using FiroozehGameServiceAndroid;
 using FiroozehGameServiceAndroid.Core;
 using FiroozehGameServiceAndroid.Models;
+using FiroozehGameServiceAndroid.Utils;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -106,7 +107,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				else
 				{
 					Debug.LogError("Achievement"+achievementId+"NotUnlocked");
-					_achievements.Add(new Achievement {earned = true , key = achievementId});
+					_achievements.Add(new Achievement {Earned = true , Key = achievementId});
 					FiroozehGameService.Instance.UnlockAchievement(achievementId, a => {},
 						error => { });
 				}
@@ -137,7 +138,8 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			public static void GetDataFromGameService()
 			{
-				FiroozehGameService.Instance.GetSaveGame<Save>(save =>
+				
+				 FiroozehGameService.Instance.GetSaveGame<Save>(save =>
 				{
 					ProgressManager.HighScore = save.HighScore;
 					ProgressManager.Attempts = save.Attempts;
@@ -147,6 +149,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 					SaveLocalData(GPGSIds.leaderboard_high_score,save.HighScore);
 					
 				},error => {});
+				
 				
 				FiroozehGameService.Instance.GetAchievements(achievements =>
 				{
@@ -161,7 +164,9 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 				FiroozehGameService.Instance.GetLeaderBoards(leaderBoards =>
 				{
 					SaveLeaderBoardList("LeaderBoards",leaderBoards);
+
 				},e=>{});
+		
 
 			}
 			
@@ -239,7 +244,7 @@ namespace FiroozehCorp.ZigZagGame.scripts.data {
 
 			private static bool isAchievementUnlocked(string key)
 			{
-				return _achievements.Any(a => a.key == key && a.earned);
+				return _achievements.Any(a => a.Key == key && a.Earned);
 			}
 
 		}	
